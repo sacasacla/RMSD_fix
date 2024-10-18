@@ -467,76 +467,6 @@ public class RMSD_fix : MonoBehaviour
       }
     }
 
-    // find_a_cubic_root
-    //
-    // Find the largest root of Cardano form cubic using Viete's solution,
-    //
-    //   X^3 + p X + q = 0.
-    //
-    // X = S Y, where 2 sqrt(p/3)
-    // (2 sqrt(p/3) Y)^3 + p (2 sqrt(p/3) Y) = -q.
-    // 4/3 p (2 sqrt(p/3)) Y^3 + p (2 sqrt(p/3)) Y = -q.
-    // 4/3 pSY^3 + pSY = -q.
-    // 4 Y^3 + 3 Y = -3(q/pS).
-    // Y = cos_acos(-3(q/pS))
-    // X = S cos_acos(-3(q/pS))
-    //
-    private static float find_a_cubic_root(in float p, in float q)
-    {
-      if (abs(p) < threshold)
-      {
-        if(abs(q) < threshold)
-        {
-          // X^3 = 0
-          return 0.0f;
-        }
-        else
-        {
-          // X^3 = -q
-          return -cbrt(q);
-        }
-      }
-      else if(abs(q) < threshold)
-      {
-        // X^2 = -p
-        if (p < 0.0f)
-        {
-          return sqrt(-p);
-        }
-        else
-        {
-          return 0.0f;
-        }
-      }
-
-      if(p < 0.0f)
-      {
-        float s = 2.0f * sqrt(- (1.0f/3.0f) * p);
-        float h = - (1.0f/3.0f) * p * s; // > 0
-
-        if (h < abs(q))
-        {
-          if(q < 0.0f)
-          {
-            return s * cosh_acosh3(- h / q); // 0 < x < 1
-          }
-          else
-          {
-            return - s * cosh_acosh3(h / q); // 0 < x < 1
-          }
-        }
-        else
-        {
-          return s * cos_acos3(-q / h); // -1 <= x <= 1;
-        }
-      }
-      else
-      {
-        float s = 2.0f * sqrt((1.0f/3.0f) * p);
-        return -s * sinh_asinh3(3.0f * q / (p * s));
-      }
-    }
-
     // Solve X^4 - 2 X^2 + a X + b = 0.
     private static float find_a_quartic_root(in float a, in float b)
     {
@@ -598,9 +528,82 @@ public class RMSD_fix : MonoBehaviour
         float yy = y * y, y1 = 1.0f / y;
         float f = yy * (yy - 2.0f) + k1 * y + k0;
         float g = 0.5f * y - (1.0f/6.0f) * y1;
-        y = find_a_cubic_root(- 3.0f * g * g, 0.25f * f * y1 + 2.0f * g * g * g) - g + y;
+        float gg = g * g;
+        y = find_a_cubic_root(- 3.0f * gg, 0.25f * f * y1 + 2.0f * gg * g) - g + y;
       }
       return y;
+    }
+
+    /**
+     * find_a_cubic_root
+
+       Find the largest root of Cardano form cubic
+
+         X^3 + p X + q = 0.
+
+       using Viete's solution, i.e.,
+         X = S Y, where S = 2 sqrt(p/3)
+         (2 sqrt(p/3) Y)^3 + p (2 sqrt(p/3) Y) = -q.
+         4/3 p (2 sqrt(p/3)) Y^3 + p (2 sqrt(p/3)) Y = -q.
+         4/3 pSY^3 + pSY = -q.
+         4 Y^3 + 3 Y = -3(q/pS).
+         Y = cos_acos(-3(q/pS))
+         X = S cos_acos(-3(q/pS))
+    **/
+    private static float find_a_cubic_root(in float p, in float q)
+    {
+      if (abs(p) < threshold)
+      {
+        if(abs(q) < threshold)
+        {
+          // X^3 = 0
+          return 0.0f;
+        }
+        else
+        {
+          // X^3 = -q
+          return -cbrt(q);
+        }
+      }
+      else if(abs(q) < threshold)
+      {
+        // X^2 = -p
+        if (p < 0.0f)
+        {
+          return sqrt(-p);
+        }
+        else
+        {
+          return 0.0f;
+        }
+      }
+
+      if(p < 0.0f)
+      {
+        float s = 2.0f * sqrt(- (1.0f/3.0f) * p);
+        float h = - (1.0f/3.0f) * p * s; // > 0
+
+        if (h < abs(q))
+        {
+          if(q < 0.0f)
+          {
+            return s * cosh_acosh3(- h / q); // 0 < x < 1
+          }
+          else
+          {
+            return - s * cosh_acosh3(h / q); // 0 < x < 1
+          }
+        }
+        else
+        {
+          return s * cos_acos3(-q / h); // -1 <= x <= 1;
+        }
+      }
+      else
+      {
+        float s = 2.0f * sqrt((1.0f/3.0f) * p);
+        return -s * sinh_asinh3(3.0f * q / (p * s));
+      }
     }
 
     private static float discriminant(in float k1, in float k0)

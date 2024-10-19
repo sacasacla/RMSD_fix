@@ -11,7 +11,7 @@ public class RMSD_fix : MonoBehaviour
     {
       refxyz = GetChildPositions(0, transform, 1.0f);
       origin = transform.localPosition;
-      //RMSDkit.DebugUnits();
+      // RMSDkit.DebugUnits();
     }
 
     void Update()
@@ -446,7 +446,8 @@ public class RMSD_fix : MonoBehaviour
             if     (abs(s11) > 1.0e-4f){ return (-l1*s21+l2*s11, -s21,  s11, 0.0f); }
             else if(abs(s22) > 1.0e-4f){ return (-l2*s32+l3*s22, 0.0f, -s32,  s22); }
             else if(abs(s33) > 1.0e-4f){ return ( l1*s33-l3*s31,  s33, 0.0f, -s31); }
-            else { return ( l1, 1.0f, 0.0f, 0.0f); }
+            else { return ( 1.0f, 0.0f, 0.0f, 0.0f); }
+            //else { return ( l1, 1.0f, 0.0f, 0.0f); }
           }
           else
           {
@@ -1155,17 +1156,17 @@ public class RMSD_fix : MonoBehaviour
       k = 2.0f;   unittest("find_a_cubic_root p=" + k.ToString("F3"), (x)=>find_a_cubic_root(k, x), (x,y)=>(y*y*y+k*y+x), n, -100.0f, 100.0f);
 
       Debug.Log("=== quartic solver ===");
-      for (float l = 0.57735f; l < 5.0f; k+=1.0f)
-      {
-        unittest("find_a_quartic_root x=" + l.ToString("F3"), (x)=>find_a_quartic_root(x,-l*x-l*l*(l*l-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-l*x-l*l*(l*l-2.0f))), 200, -10.0f, 10.0f);
-      }
-    //k = 1.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 1.001f; unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 1.01f;  unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 1.1f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 1.2f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 2.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
-    //k = 5.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+    //for (float l = 0.57735f; l < 5.0f; k+=1.0f)
+    //{
+    //  unittest("find_a_quartic_root x=" + l.ToString("F3"), (x)=>find_a_quartic_root(x,-l*x-l*l*(l*l-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-l*x-l*l*(l*l-2.0f))), 200, -10.0f, 10.0f);
+    //}
+      k = 1.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 1.001f; unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 1.01f;  unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 1.1f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 1.2f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 2.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
+      k = 5.0f;   unittest("find_a_quartic_root x=" + k.ToString("F3"), (x)=>find_a_quartic_root(x,-k*x-k*k*(k*k-2.0f)), (x,y)=>((y*y-2.0f)*y*y+x*y+(-k*x-k*k*(k*k-2.0f))), n,-100.0f, 100.0f);
 
       Debug.Log("=== find nullvector ===");
       unittest_null_vector(
@@ -1271,7 +1272,7 @@ public class RMSD_fix : MonoBehaviour
           new float[] {1.0f,0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f}
           );
 
-      Debug.Log("=== QR factorization ===");
+      //Debug.Log("=== QR factorization ===");
       //Debug.Log(qr3x3(new Matrix3x3(1.0f, 2.0f, 1.0f, 1.0f, 2.0f, 4.0f, 2.0f, 3.0f, 4.0f)).ToString());
       //Debug.Log(qr3x3(new Matrix3x3(0.0f, 2.0f, 1.0f, 1.0f, 1.0f, 4.0f, 2.0f, 3.0f, 4.0f)).ToString());
       //Debug.Log(qr3x3(new Matrix3x3(3.0f, 2.0f, 1.0f, 1.0f, 5.0f, 4.0f, 2.0f, 3.0f, 4.0f)).ToString());

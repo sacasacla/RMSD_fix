@@ -260,10 +260,6 @@ public class RMSD_fix : MonoBehaviour
       float abs00 = abs(a00), abs22 = abs(a22);
       float q0, q1, q2, q3;
 
-//    float a10 = C.x12-C.x21, a11 = m01+m2d;
-//    float a20 = C.x20-C.x02, a21 = C.x01+C.x10, a22 =-m01+m2d;
-//    float a30 = C.x01-C.x10, a31 = C.x02+C.x20, a32 = C.x12+C.x21, a33 =-p01+p2d;
-
       if (abs00 > abs22)
       {
         float abs11 = abs(a11);
@@ -277,15 +273,12 @@ public class RMSD_fix : MonoBehaviour
                                             a10, a11,
                                             a20, a21, a22,
                                             a30, a31, a32, a33);
-       //(q0, q1, q2, q3) = find_nullvector(a00,
-       //                                   a10, a11,
-       //                                   a20, a21, a22,
-       //                                   a30, a31, a32, a33);
         }
         else
         {
           a11 = 1.0f/a11;
-          a10 = a11*(C.x12-C.x21); a00 *= a11;
+          a00 *= a11;
+          a10 = a11*(C.x12-C.x21);
           a20 = a11*(C.x20-C.x02); a21 = a11*(C.x01+C.x10); a22*= a11;
           a30 = a11*(C.x01-C.x10); a31 = a11*(C.x02+C.x20); a32 = a11*(C.x12+C.x21); a33*= a11;
           (q1, q0, q2, q3) = find_nullvector(1.0f,
@@ -300,8 +293,9 @@ public class RMSD_fix : MonoBehaviour
         if(abs22 > abs33)
         {
           a22 = 1.0f/a22;
+          a00*= a22;
           a10 = a22*(C.x12-C.x21); a11*= a22;
-          a20 = a22*(C.x20-C.x02); a21 = a22*(C.x01+C.x10); a00*= a22;
+          a20 = a22*(C.x20-C.x02); a21 = a22*(C.x01+C.x10);
           a30 = a22*(C.x01-C.x10); a31 = a22*(C.x02+C.x20); a32 = a22*(C.x12+C.x21); a33*= a22;
           (q2, q1, q0, q3) = find_nullvector(1.0f,
                                              a21, a11,
@@ -323,7 +317,9 @@ public class RMSD_fix : MonoBehaviour
 
       /**
       float d00 = a00+lambda, d11 = a11+lambda, d22 = a22+lambda, d33 = a33+lambda;
-      Debug.Log("L "
+      Debug.Log("C "
+             +  C.ToString()
+             + "\nL "
              + $"\n{pp(d00)} {pp(a10)} {pp(a20)} {pp(a30)}"
              + $"\n{pp(a10)} {pp(d11)} {pp(a21)} {pp(a31)}"
              + $"\n{pp(a20)} {pp(a21)} {pp(d22)} {pp(a32)}"
